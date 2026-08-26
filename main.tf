@@ -1,25 +1,17 @@
-resource "google_compute_instance" "terraform_vm" {
-  name         = "terraform-devops-vm"
-  machine_type = "e2-micro"
-  zone         = "europe-west2-a"
+module "compute_vm" {
+  source = "./modules/compute-vm"
 
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2204-lts"
-      size  = 10
-    }
-  }
+  instance_name = var.instance_name
+  machine_type  = var.machine_type
+  zone          = var.zone
 
-  network_interface {
-    network = "default"
-
-    access_config {
-    }
-  }
+  network    = google_compute_network.devops_vpc.id
+  subnetwork = google_compute_subnetwork.devops_subnet.id
 
   labels = {
     environment = "lab"
     managed_by  = "terraform"
+    owner       = "devops-training"
   }
 
   tags = ["terraform-lab"]
