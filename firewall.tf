@@ -1,5 +1,5 @@
 resource "google_compute_firewall" "allow_http" {
-  name    = "terraform-allow-http"
+  name    = local.allow_http_name
   network = google_compute_network.devops_vpc.name
 
   allow {

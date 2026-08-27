@@ -2,7 +2,8 @@ module "compute_vm" {
   source = "./modules/compute-vm"
 
   instance_name = var.instance_name
-  machine_type  = var.machine_type
+  machine_type  = var.environment_config[var.environment].machine_type
+  disk_size     = var.environment_config[var.environment].disk_size
   zone          = var.zone
 
   network    = google_compute_network.devops_vpc.id

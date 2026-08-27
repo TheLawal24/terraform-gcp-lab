@@ -4,6 +4,20 @@ resource "google_compute_instance" "this" {
   zone                      = var.zone
   allow_stopping_for_update = true
 
+  lifecycle {
+    prevent_destroy = true
+
+    ignore_changes = [
+      labels
+    ]
+  }
+
+
+
+
+
+
+
   boot_disk {
     initialize_params {
       image = var.image

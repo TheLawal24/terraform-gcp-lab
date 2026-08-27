@@ -1,10 +1,21 @@
 resource "google_compute_network" "devops_vpc" {
-  name                    = "terraform-devops-vpc"
+  name                    = local.vpc_name
   auto_create_subnetworks = false
+
+  lifecycle {
+    precondition {
+      condition = (
+        (terraform.workspace == "default" && var.environment == "dev") ||
+        (terraform.workspace != "default" && terraform.workspace == var.environment)
+      )
+
+      error_message = "Workspace and environment do not match. Use default for dev, staging for staging, and prod for prod."
+    }
+  }
 }
 
 resource "google_compute_subnetwork" "devops_subnet" {
-  name          = "terraform-devops-subnet"
+  name          = local.subnet_name
   ip_cidr_range = "10.20.0.0/24"
   region        = var.region
   network       = google_compute_network.devops_vpc.id
