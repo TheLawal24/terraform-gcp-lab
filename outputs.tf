@@ -25,3 +25,11 @@ output "subnet_name" {
 output "subnet_cidr" {
   value = google_compute_subnetwork.devops_subnet.ip_cidr_range
 }
+
+output "deployment_name" {
+  value = local.deployment_name
+}
+
+output "environment_tier" {
+  value = local.environment_labels.tier
+}

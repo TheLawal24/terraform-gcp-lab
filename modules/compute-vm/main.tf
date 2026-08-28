@@ -7,9 +7,10 @@ resource "google_compute_instance" "this" {
   lifecycle {
     prevent_destroy = true
 
-    ignore_changes = [
-      labels
-    ]
+    postcondition {
+      condition     = self.current_status == "RUNNING"
+      error_message = "The Compute Engine VM must be in RUNNING state."
+    }
   }
 
 
@@ -25,13 +26,16 @@ resource "google_compute_instance" "this" {
     }
   }
 
-
   labels = var.labels
+
+  metadata_startup_script = var.enable_production_metadata ? "#!/bin/bash\necho \"Environment: ${var.environment}\" > /tmp/environment.txt\n" : null
+
   network_interface {
     network    = var.network
     subnetwork = var.subnetwork
 
     access_config {}
   }
+
   tags = var.tags
 }

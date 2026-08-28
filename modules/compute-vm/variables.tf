@@ -39,3 +39,14 @@ variable "subnetwork" {
   type    = string
   default = null
 }
+
+
+
+variable "environment" {
+  type = string
+}
+
+variable "enable_production_metadata" {
+  type    = bool
+  default = false
+}
