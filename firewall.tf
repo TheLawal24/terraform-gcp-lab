@@ -1,6 +1,6 @@
 resource "google_compute_firewall" "allow_http" {
   name    = local.allow_http_name
-  network = google_compute_network.devops_vpc.name
+  network = module.network.vpc_name
 
   allow {
     protocol = "tcp"

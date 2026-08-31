@@ -14,7 +14,7 @@ locals {
 resource "google_compute_firewall" "dynamic_demo" {
   name = var.environment == "dev" ? "terraform-dynamic-demo" : "terraform-${var.environment}-dynamic-demo"
 
-  network = google_compute_network.devops_vpc.name
+  network = module.network.vpc_name
 
   dynamic "allow" {
     for_each = local.dynamic_allow_rules
@@ -26,7 +26,7 @@ resource "google_compute_firewall" "dynamic_demo" {
   }
 
   source_ranges = [
-    google_compute_subnetwork.devops_subnet.ip_cidr_range
+    module.network.subnet_cidr
   ]
 
   target_tags = ["terraform-lab"]

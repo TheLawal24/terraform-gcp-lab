@@ -9,8 +9,8 @@ module "compute_vm" {
   environment                = var.environment
   enable_production_metadata = var.environment == "prod"
 
-  network    = google_compute_network.devops_vpc.id
-  subnetwork = google_compute_subnetwork.devops_subnet.id
+  network    = module.network.vpc_id
+  subnetwork = module.network.subnet_id
 
   labels = local.common_labels
 

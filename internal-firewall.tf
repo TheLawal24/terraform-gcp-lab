@@ -9,7 +9,7 @@ resource "google_compute_firewall" "internal_services" {
   for_each = local.internal_ports
 
   name    = "${local.internal_firewall_prefix}-${each.key}"
-  network = google_compute_network.devops_vpc.name
+  network = module.network.vpc_name
 
   allow {
     protocol = "tcp"
@@ -17,7 +17,7 @@ resource "google_compute_firewall" "internal_services" {
   }
 
   source_ranges = [
-    google_compute_subnetwork.devops_subnet.ip_cidr_range
+    module.network.subnet_cidr
   ]
 
   target_tags = ["terraform-lab"]

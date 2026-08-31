@@ -12,7 +12,7 @@ check "environment_configuration" {
 check "subnet_configuration" {
   assert {
     condition = (
-      google_compute_subnetwork.devops_subnet.ip_cidr_range ==
+      module.network.subnet_cidr ==
       var.environment_config[var.environment].subnet_cidr
     )
 

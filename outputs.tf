@@ -11,19 +11,19 @@ output "internal_ip" {
 }
 
 output "network_name" {
-  value = google_compute_network.devops_vpc.name
+  value = module.network.vpc_name
 }
 
 output "network_self_link" {
-  value = google_compute_network.devops_vpc.self_link
+  value = module.network.vpc_self_link
 }
 
 output "subnet_name" {
-  value = google_compute_subnetwork.devops_subnet.name
+  value = module.network.subnet_name
 }
 
 output "subnet_cidr" {
-  value = google_compute_subnetwork.devops_subnet.ip_cidr_range
+  value = module.network.subnet_cidr
 }
 
 output "deployment_name" {

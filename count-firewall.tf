@@ -6,7 +6,7 @@ resource "google_compute_firewall" "count_demo" {
   count = length(local.count_ports)
 
   name    = "${local.count_firewall_prefix}-${local.count_ports[count.index]}"
-  network = google_compute_network.devops_vpc.name
+  network = module.network.vpc_name
 
   allow {
     protocol = "tcp"
@@ -14,7 +14,7 @@ resource "google_compute_firewall" "count_demo" {
   }
 
   source_ranges = [
-    google_compute_subnetwork.devops_subnet.ip_cidr_range
+    module.network.subnet_cidr
   ]
 
   target_tags = ["terraform-lab"]
