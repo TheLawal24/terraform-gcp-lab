@@ -120,9 +120,6 @@ jobs:
       TF_VAR_environment: prod
       TF_VAR_instance_name: terraform-prod-vm
 
-
-
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -146,7 +143,7 @@ jobs:
         run: terraform workspace select prod
 
       - name: Terraform Prod Plan
-        run:  terraform plan -input=false -no-color -out=prod.tfplan
+        run: terraform plan -input=false -no-color -out=prod.tfplan
 
       - name: Upload Prod Plan
         uses: actions/upload-artifact@v4
@@ -169,16 +166,16 @@ jobs:
       inputs.environment == 'dev'
 
     environment:
-      TF_IN_AUTOMATION: true
-      TF_VAR_environment: dev
-      TF_VAR_instance_name: terraform-devops-vm
-
-
-
+      name: dev-apply
 
     permissions:
       contents: read
       id-token: write
+
+    env:
+      TF_IN_AUTOMATION: true
+      TF_VAR_environment: dev
+      TF_VAR_instance_name: terraform-devops-vm
 
     steps:
       - name: Checkout repository
@@ -224,13 +221,16 @@ jobs:
       inputs.environment == 'prod'
 
     environment:
-      TF_IN_AUTOMATION: true
-      TF_VAR_environment: prod
-      TF_VAR_instance_name: terraform-prod-vm
+      name: prod-apply
 
     permissions:
       contents: read
       id-token: write
+
+    env:
+      TF_IN_AUTOMATION: true
+      TF_VAR_environment: prod
+      TF_VAR_instance_name: terraform-prod-vm
 
     steps:
       - name: Checkout repository
