@@ -9,15 +9,21 @@ on:
     branches:
       - main
 
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment to deploy"
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
+workflow_dispatch:
+  inputs:
+    environment:
+      description: "Environment to deploy"
+      required: true
+      type: choice
+      options:
+        - dev
+        - prod
+
+    destructive_test:
+      description: "Test destructive-plan blocker"
+      required: false
+      type: boolean
+      default: false
 
 permissions:
   contents: read
@@ -143,7 +149,20 @@ jobs:
         run: terraform workspace select prod
 
       - name: Terraform Prod Plan
-        run: terraform plan -input=false -no-color -out=prod.tfplan
+        run: |
+          if [ "${{ inputs.destructive_test }}" = "true" ]; then
+            echo "Running SAFE destructive-plan test."
+            terraform plan \
+              -input=false \
+              -no-color \
+              -replace='google_compute_firewall.dynamic_demo' \
+              -out=prod.tfplan
+          else
+            terraform plan \
+              -input=false \
+              -no-color \
+              -out=prod.tfplan
+          fi
 
       - name: Block Destructive Prod Changes
         run: |
