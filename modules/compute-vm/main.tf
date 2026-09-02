@@ -3,6 +3,7 @@ resource "google_compute_instance" "this" {
   machine_type              = var.machine_type
   zone                      = var.zone
   allow_stopping_for_update = true
+  deletion_protection       = var.deletion_protection
 
   lifecycle {
     prevent_destroy = true

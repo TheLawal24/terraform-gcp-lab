@@ -50,3 +50,8 @@ variable "enable_production_metadata" {
   type    = bool
   default = false
 }
+
+variable "deletion_protection" {
+  type    = bool
+  default = false
+}
