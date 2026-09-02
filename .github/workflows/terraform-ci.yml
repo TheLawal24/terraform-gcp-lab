@@ -19,11 +19,11 @@ on:
           - dev
           - prod
 
-     destructive_test:
-       description: "Test destructive-plan blocker"
-       required: false
-       type: boolean
-       default: false
+      destructive_test:
+      description: "Test destructive-plan blocker"
+      required: false
+      type: boolean
+      default: false
 
 permissions:
   contents: read
