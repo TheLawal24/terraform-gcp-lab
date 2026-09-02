@@ -99,7 +99,7 @@ jobs:
           name: terraform-dev-plan
           path: dev.tfplan
           retention-days: 1
-
+          overwrite: true
 
   prod-plan:
     name: Terraform Prod Plan
@@ -171,12 +171,6 @@ jobs:
 
           echo "No destructive production actions detected."
 
-      - name: Upload Prod Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-prod-plan
-          path: prod.tfplan
-          retention-days: 1
 
       - name: Upload Prod Plan
         uses: actions/upload-artifact@v4
@@ -184,7 +178,7 @@ jobs:
           name: terraform-prod-plan
           path: prod.tfplan
           retention-days: 1
-
+          overwrite: true
 
   dev-apply:
     name: Terraform Dev Apply
