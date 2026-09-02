@@ -9,21 +9,21 @@ on:
     branches:
       - main
 
-workflow_dispatch:
-  inputs:
-    environment:
-      description: "Environment to deploy"
-      required: true
-      type: choice
-      options:
-        - dev
-        - prod
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
 
-    destructive_test:
-      description: "Test destructive-plan blocker"
-      required: false
-      type: boolean
-      default: false
+     destructive_test:
+       description: "Test destructive-plan blocker"
+       required: false
+       type: boolean
+       default: false
 
 permissions:
   contents: read
