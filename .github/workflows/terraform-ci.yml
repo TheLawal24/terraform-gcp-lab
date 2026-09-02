@@ -20,10 +20,10 @@ on:
           - prod
 
       destructive_test:
-      description: "Test destructive-plan blocker"
-      required: false
-      type: boolean
-      default: false
+        description: "Test destructive-plan blocker"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -50,7 +50,6 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
-
 
   dev-plan:
     name: Terraform Dev Plan
@@ -102,10 +101,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
-          name: terraform-dev-plan
+          name: terraform-dev-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: dev.tfplan
           retention-days: 1
-          overwrite: true
 
   prod-plan:
     name: Terraform Prod Plan
@@ -152,6 +150,7 @@ jobs:
         run: |
           if [ "${{ inputs.destructive_test }}" = "true" ]; then
             echo "Running SAFE destructive-plan test."
+
             terraform plan \
               -input=false \
               -no-color \
@@ -175,8 +174,8 @@ jobs:
             ]
             | length > 0
           ' prod-plan.json > /dev/null; then
+
             echo "ERROR: Destructive Terraform actions detected in production plan."
-            echo
             echo "Affected resources:"
 
             jq -r '
@@ -190,14 +189,12 @@ jobs:
 
           echo "No destructive production actions detected."
 
-
       - name: Upload Prod Plan
         uses: actions/upload-artifact@v4
         with:
-          name: terraform-prod-plan
+          name: terraform-prod-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: prod.tfplan
           retention-days: 1
-          overwrite: true
 
   dev-apply:
     name: Terraform Dev Apply
@@ -248,11 +245,10 @@ jobs:
       - name: Download Dev Plan
         uses: actions/download-artifact@v5
         with:
-          name: terraform-dev-plan
+          name: terraform-dev-plan-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Terraform Dev Apply
         run: terraform apply -input=false dev.tfplan
-
 
   prod-apply:
     name: Terraform Prod Apply
@@ -303,7 +299,7 @@ jobs:
       - name: Download Prod Plan
         uses: actions/download-artifact@v5
         with:
-          name: terraform-prod-plan
+          name: terraform-prod-plan-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Terraform Prod Apply
         run: terraform apply -input=false prod.tfplan
