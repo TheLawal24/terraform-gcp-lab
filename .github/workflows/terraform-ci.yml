@@ -121,6 +121,7 @@ jobs:
 
     env:
       TF_IN_AUTOMATION: true
+      TF_WORKSPACE: prod
       TF_VAR_environment: prod
       TF_VAR_instance_name: terraform-prod-vm
 
@@ -142,9 +143,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -input=false
-
-      - name: Select Prod Workspace
-        run: terraform workspace select prod
 
       - name: Terraform Prod Plan
         run: |
@@ -271,6 +269,7 @@ jobs:
 
     env:
       TF_IN_AUTOMATION: true
+      TF_WORKSPACE: prod
       TF_VAR_environment: prod
       TF_VAR_instance_name: terraform-prod-vm
 
@@ -292,9 +291,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -input=false
-
-      - name: Select Prod Workspace
-        run: terraform workspace select prod
 
       - name: Download Prod Plan
         uses: actions/download-artifact@v5

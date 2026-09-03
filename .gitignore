@@ -4,3 +4,4 @@
 .terraform/
 *.tfplan
 gha-creds-*.json
+*-state-backup.json
