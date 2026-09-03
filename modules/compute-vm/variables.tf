@@ -1,57 +1,70 @@
 variable "instance_name" {
-  type = string
+  description = "Name of the Compute Engine instance"
+  type        = string
 }
 
 variable "machine_type" {
-  type = string
+  description = "Machine type for the Compute Engine instance"
+  type        = string
 }
 
 variable "zone" {
-  type = string
+  description = "GCP zone for the Compute Engine instance"
+  type        = string
 }
 
 variable "image" {
-  type    = string
-  default = "ubuntu-os-cloud/ubuntu-2204-lts"
+  description = "Boot disk image"
+  type        = string
+  default     = "ubuntu-os-cloud/ubuntu-2204-lts"
 }
 
 variable "disk_size" {
-  type    = number
-  default = 10
+  description = "Boot disk size in GB"
+  type        = number
 }
 
 variable "network" {
-  type    = string
-  default = "default"
-}
-
-variable "labels" {
-  type    = map(string)
-  default = {}
-}
-
-variable "tags" {
-  type    = list(string)
-  default = []
+  description = "VPC network used by the instance"
+  type        = string
 }
 
 variable "subnetwork" {
-  type    = string
-  default = null
+  description = "Subnetwork used by the instance"
+  type        = string
 }
 
+variable "labels" {
+  description = "Labels applied to the instance"
+  type        = map(string)
+  default     = {}
+}
 
+variable "tags" {
+  description = "Network tags applied to the instance"
+  type        = list(string)
+  default     = []
+}
 
 variable "environment" {
-  type = string
+  description = "Deployment environment"
+  type        = string
 }
 
 variable "enable_production_metadata" {
-  type    = bool
-  default = false
+  description = "Whether to enable production startup metadata"
+  type        = bool
+  default     = false
 }
 
 variable "deletion_protection" {
-  type    = bool
-  default = false
+  description = "Whether GCP deletion protection is enabled"
+  type        = bool
+  default     = false
+}
+
+variable "enable_public_ip" {
+  description = "Whether to assign a public external IP to the VM"
+  type        = bool
+  default     = false
 }

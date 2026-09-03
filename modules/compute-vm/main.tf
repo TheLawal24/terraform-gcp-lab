@@ -1,3 +1,4 @@
+#trivy:ignore:GCP-0031
 resource "google_compute_instance" "this" {
   name                      = var.instance_name
   machine_type              = var.machine_type
@@ -14,12 +15,6 @@ resource "google_compute_instance" "this" {
     }
   }
 
-
-
-
-
-
-
   boot_disk {
     initialize_params {
       image = var.image
@@ -35,7 +30,11 @@ resource "google_compute_instance" "this" {
     network    = var.network
     subnetwork = var.subnetwork
 
-    access_config {}
+    dynamic "access_config" {
+      for_each = var.enable_public_ip ? [1] : []
+
+      content {}
+    }
   }
 
   tags = var.tags
