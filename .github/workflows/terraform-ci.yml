@@ -51,6 +51,24 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v5
+        with:
+          tflint_version: latest
+
+      - name: Run TFLint
+        run: |
+          tflint --init
+          tflint --recursive
+
+      - name: Run Trivy Terraform Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: .
+          exit-code: "1"
+          severity: "HIGH,CRITICAL"
+
   dev-plan:
     name: Terraform Dev Plan
     runs-on: ubuntu-latest
