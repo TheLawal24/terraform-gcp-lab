@@ -8,7 +8,7 @@ module "compute_vm" {
 
   environment                = var.environment
   enable_production_metadata = var.environment == "prod"
-  deletion_protection        = var.environment == "prod"
+  deletion_protection        = false
   enable_public_ip           = var.environment != "prod"
 
   network    = module.network.vpc_id
