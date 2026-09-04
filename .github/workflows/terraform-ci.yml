@@ -179,6 +179,27 @@ jobs:
               -out=prod.tfplan
           fi
 
+      - name: Enforce Production Security Policy
+        run: |
+          terraform show -json prod.tfplan > prod-policy-plan.json
+
+          PUBLIC_IP_COUNT=$(jq '
+            [
+              .planned_values.root_module.child_modules[]?.resources[]?
+              | select(.type == "google_compute_instance")
+              | .values.network_interface[]?
+              | .access_config[]?
+            ]
+            | length
+          ' prod-policy-plan.json)
+
+          if [ "$PUBLIC_IP_COUNT" -gt 0 ]; then
+            echo "ERROR: Production VM has a public IP configuration."
+            exit 1
+          fi
+
+          echo "Production policy passed: no public VM IP detected."
+
       - name: Block Destructive Prod Changes
         run: |
           terraform show -json prod.tfplan > prod-plan.json
