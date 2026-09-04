@@ -220,6 +220,27 @@ jobs:
 
           echo "Production policy passed: deletion protection enabled."
 
+      - name: Enforce Production Naming Policy
+        run: |
+          terraform show -json prod.tfplan > prod-naming-policy.json
+
+          INVALID_NAMES=$(jq '
+            [
+              .planned_values.root_module.resources[]?,
+              .planned_values.root_module.child_modules[]?.resources[]?
+              | select(.values.name? != null)
+              | select((.values.name | contains("prod")) | not)
+            ]
+            | length
+          ' prod-naming-policy.json)
+
+          if [ "$INVALID_NAMES" -gt 0 ]; then
+            echo "ERROR: Production resource name does not contain prod."
+            exit 1
+          fi
+
+          echo "Production policy passed: resource naming is compliant."
+
       - name: Block Destructive Prod Changes
         run: |
           terraform show -json prod.tfplan > prod-plan.json
