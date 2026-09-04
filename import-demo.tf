@@ -1,5 +1,5 @@
 resource "google_compute_firewall" "managed_demo" {
-  name    = var.environment == "dev" ? "terraform-import-demo" : "terraform-${var.environment}-import-demo"
+  name    = "terraform-import-demo"
   network = module.network.vpc_name
 
   allow {
