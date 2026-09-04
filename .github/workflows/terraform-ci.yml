@@ -200,6 +200,26 @@ jobs:
 
           echo "Production policy passed: no public VM IP detected."
 
+      - name: Enforce Production Deletion Protection
+        run: |
+          terraform show -json prod.tfplan > prod-deletion-policy.json
+
+          UNPROTECTED=$(jq '
+            [
+              .planned_values.root_module.child_modules[]?.resources[]?
+              | select(.type == "google_compute_instance")
+              | select(.values.deletion_protection != true)
+            ]
+            | length
+          ' prod-deletion-policy.json)
+
+          if [ "$UNPROTECTED" -gt 0 ]; then
+            echo "ERROR: Production VM deletion protection is not enabled."
+            exit 1
+          fi
+
+          echo "Production policy passed: deletion protection enabled."
+
       - name: Block Destructive Prod Changes
         run: |
           terraform show -json prod.tfplan > prod-plan.json
