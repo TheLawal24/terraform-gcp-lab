@@ -75,11 +75,11 @@ jobs:
     needs: terraform-checks
 
     if: >
-      github.ref == 'refs/heads/main' &&
-      (
-        github.event_name == 'push' ||
-        (github.event_name == 'workflow_dispatch' && inputs.environment == 'dev')
-      )
+      (github.event_name == 'pull_request' && github.base_ref == 'main') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/main' &&
+       inputs.environment == 'dev')
 
     permissions:
       contents: read
