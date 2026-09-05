@@ -122,7 +122,7 @@ jobs:
         run: terraform workspace select default
 
       - name: Terraform Dev Plan
-        run: terraform plan -input=false -no-color -out=dev.tfplan
+        run: terraform plan -input=false -no-color -lock-timeout=5m -out=dev.tfplan
 
       - name: Upload Dev Plan
         if: github.event_name == 'workflow_dispatch'
@@ -185,6 +185,7 @@ jobs:
             terraform plan \
               -input=false \
               -no-color \
+              -lock-timeout=5m \
               -out=prod.tfplan
           fi
 
