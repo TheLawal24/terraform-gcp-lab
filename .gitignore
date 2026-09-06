@@ -5,3 +5,8 @@
 *.tfplan
 gha-creds-*.json
 *-state-backup.json
+
+# Python
+app/.venv/
+app/__pycache__/
+app/.pytest_cache/
